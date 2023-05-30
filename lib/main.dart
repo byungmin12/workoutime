@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './widgets/Sets.dart';
+import './widgets/sets_widget.dart';
+import 'widgets/timer_widget.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -15,7 +16,7 @@ class Main extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
           body: Column(
-        children: [Sets()],
+        children: [Sets(),Timer()],
       )),
     );
   }
