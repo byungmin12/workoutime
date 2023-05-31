@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:workoutime/states/setsState.dart';
 
 class Sets extends StatefulWidget {
   const Sets({super.key});
@@ -7,23 +9,18 @@ class Sets extends StatefulWidget {
   State<Sets> createState() => _Sets();
 }
 
-class _Sets extends State<Sets> {
-  int sets = 5;
-
-  void handlerUpdateSets(int newSets) {
-    setState(() {
-      sets = newSets;
-    });
-  }
+class _Sets extends State<Sets>{
 
   @override
   Widget build(BuildContext context) {
+    final sets = Provider.of<SetsState>(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         ElevatedButton(
           onPressed: () {
-            showModal(context, sets, handlerUpdateSets); // setCnt 값을 전달
+            showModal(context, sets.getSets, sets.handlerUpdateSets); // setCnt 값을 전달
           },
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color?>(
@@ -47,7 +44,7 @@ class _Sets extends State<Sets> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "$sets", // setCnt 값 사용
+                  "${sets.getSets}", // setCnt 값 사용
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w900,
@@ -82,7 +79,7 @@ void showModal(BuildContext context, int sets, Function(int) handlerUpdateSets) 
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Sets: $sets',
+                  'Sets: $sets.',
                   style: TextStyle(fontSize: 24.0),
                 ),
                 SizedBox(height: 16.0),
