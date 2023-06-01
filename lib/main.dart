@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workoutime/states/setsState.dart';
 
-import './widgets/sets_widget.dart';
+import './widgets/setting_widget.dart';
 import 'widgets/timer_widget.dart';
 
 void main() {
@@ -20,7 +20,7 @@ class Main extends StatelessWidget {
       child: MaterialApp(
         home: Scaffold(
           body: Column(
-            children: [Sets(), TimerWidget()],
+            children: [Setting(), TimerWidget()],
           ),
           backgroundColor: Colors.white,
         ),

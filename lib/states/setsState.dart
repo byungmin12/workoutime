@@ -14,4 +14,9 @@ class SetsState with ChangeNotifier {
     sets--;
     notifyListeners();
   }
+
+  void handlerInitialSets(){
+    sets = 5;
+    notifyListeners();
+  }
 }

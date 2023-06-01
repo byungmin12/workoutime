@@ -17,12 +17,11 @@ class _TimerState extends State<TimerWidget> {
   int initialRestTime = 30;
   int t = 0;
   int restTime = 30;
-  bool isWorkout = true;
+  bool isWorkout = false;
 
   @override
   void initState() {
     super.initState();
-    handlerStartTimer();
   }
 
   void handlerStartTimer() {
@@ -35,6 +34,8 @@ class _TimerState extends State<TimerWidget> {
           final sets = Provider.of<SetsState>(context, listen: false);
           if (sets.getSets > 0) {
             sets.handlerDecreaseSets();
+          } else if (sets.getSets == 0) {
+            sets.handlerInitialSets();
           }
         }
       });

@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:workoutime/states/setsState.dart';
+import 'package:workoutime/widgets/sets_widget.dart';
+
+class Setting extends StatefulWidget {
+  const Setting({super.key});
+
+  @override
+  State<Setting> createState() => _Setting();
+}
+
+class  _Setting extends State<Setting> {
+  @override
+  Widget build(BuildContext context) {
+    final sets = Provider.of<SetsState>(context);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            showModal(
+                context); // setCnt 값을 전달
+          },
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+                  return Colors.red; // 버튼의 색상 지정
+                },
+              ),
+              fixedSize: MaterialStateProperty.resolveWith<Size?>(
+                (Set<MaterialState> states) {
+                  return const Size.square(100); // 버튼의 크기 지정
+                },
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(19),
+                ),
+              ))),
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "${sets.getSets}", // setCnt 값 사용
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 24,
+                  ),
+                ),
+                const Text(
+                  "SETS",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+void showModal(
+    BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return Container(
+            padding: EdgeInsets.all(16.0),
+            child: Center(
+              child: Column(
+                children: [
+                  Sets(),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
+}
