@@ -11,7 +11,14 @@ class SetsState with ChangeNotifier {
   }
 
   void handlerDecreaseSets(){
+    if(sets <= 0)return ;
+
     sets--;
+    notifyListeners();
+  }
+
+  void handlerIncreaseSets(){
+    sets++;
     notifyListeners();
   }
 

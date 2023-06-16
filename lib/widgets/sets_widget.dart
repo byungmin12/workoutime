@@ -5,12 +5,16 @@ import '../states/setsState.dart';
 
 class Sets extends StatefulWidget {
   final String title;
+  final dynamic cnt;
+  final Widget InputWidget;
   final Function() handlerIncreaseSets;
   final Function() handlerDecreaseSets;
 
   const Sets({
     Key? key,
     required this.title,
+    required this.cnt,
+    required this.InputWidget,
     required this.handlerIncreaseSets,
     required this.handlerDecreaseSets,
   }) : super(key: key);
@@ -22,7 +26,6 @@ class Sets extends StatefulWidget {
 class _SetsState extends State<Sets> {
   @override
   Widget build(BuildContext context) {
-    final sets = Provider.of<SetsState>(context);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -33,9 +36,11 @@ class _SetsState extends State<Sets> {
         ),
         const SizedBox(width: 16.0),
         Text(
-          'Sets: ${widget.title}',
+          '${widget.title}:',
           style: TextStyle(fontSize: 24.0),
         ),
+        widget.InputWidget
+        ,
         const SizedBox(width: 16.0),
         IconButton(
           icon: Icon(Icons.arrow_downward),

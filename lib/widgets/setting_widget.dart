@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workoutime/states/setsState.dart';
+import 'package:workoutime/states/timeState.dart';
 import 'package:workoutime/widgets/sets_widget.dart';
+import 'package:workoutime/widgets/timeInputs.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -10,7 +12,7 @@ class Setting extends StatefulWidget {
   State<Setting> createState() => _Setting();
 }
 
-class  _Setting extends State<Setting> {
+class _Setting extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     final sets = Provider.of<SetsState>(context);
@@ -20,8 +22,7 @@ class  _Setting extends State<Setting> {
       children: [
         ElevatedButton(
           onPressed: () {
-            showModal(
-                context); // setCnt 값을 전달
+            showModal(context); // setCnt 값을 전달
           },
           style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color?>(
@@ -68,19 +69,54 @@ class  _Setting extends State<Setting> {
   }
 }
 
-void showModal(
-    BuildContext context) {
+void showModal(BuildContext context) {
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
+          final sets = Provider.of<SetsState>(context);
+          final time = Provider.of<TimeState>(context);
+          TextEditingController minutesController = TextEditingController();
+          TextEditingController secondsController = TextEditingController();
+          TextEditingController setsController = TextEditingController();
+
+          minutesController.text = time.getRestTime ~/ 60 <= 9 ? '0${time.getRestTime ~/ 60}' : '${time.getRestTime ~/ 60}';
+          secondsController.text = time.getRestTime % 60 <= 9 ? "0${time.getRestTime % 60}" : "${time.getRestTime % 60}";
+          setsController.text = "${sets.getSets}";
+
           return Container(
             padding: EdgeInsets.all(16.0),
             child: Center(
               child: Column(
                 children: [
-                  Sets(),
+                  Sets(
+                    title: "sets",
+                    cnt: sets.getSets,
+                    InputWidget: SizedBox(
+                      width: 100,
+                      child: TextField(
+                        controller: setsController,
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          int number = int.tryParse(value) ?? 0;
+                        },
+                      ),
+                    ),
+                    handlerIncreaseSets: sets.handlerIncreaseSets,
+                    handlerDecreaseSets: sets.handlerDecreaseSets,
+                  ),
+                  Sets(
+                    title: "time",
+                    cnt: time.getRestTimeStr,
+                    InputWidget: TimeInputs(
+                      minutesController: minutesController,
+                      secondsController: secondsController,
+                      handlerSetTimer: time.handlerUpdateSets,
+                    ),
+                    handlerIncreaseSets: time.handlerIncreaseSets,
+                    handlerDecreaseSets: time.handlerDecreaseSets,
+                  ),
                 ],
               ),
             ),
