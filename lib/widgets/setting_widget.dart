@@ -80,9 +80,12 @@ void showModal(BuildContext context) {
           TextEditingController minutesController = TextEditingController();
           TextEditingController secondsController = TextEditingController();
           TextEditingController setsController = TextEditingController();
+          print(time.getRestTime);
 
-          minutesController.text = time.getRestTime ~/ 60 <= 9 ? '0${time.getRestTime ~/ 60}' : '${time.getRestTime ~/ 60}';
-          secondsController.text = time.getRestTime % 60 <= 9 ? "0${time.getRestTime % 60}" : "${time.getRestTime % 60}";
+          minutesController.text =
+              (time.getRestTime ~/ 60).toString().padLeft(2, '0');
+          secondsController.text =
+              (time.getRestTime % 60).toString().padLeft(2, '0');
           setsController.text = "${sets.getSets}";
 
           return Container(
@@ -95,13 +98,7 @@ void showModal(BuildContext context) {
                     cnt: sets.getSets,
                     InputWidget: SizedBox(
                       width: 100,
-                      child: TextField(
-                        controller: setsController,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          int number = int.tryParse(value) ?? 0;
-                        },
-                      ),
+                      child: Text('${sets.getSets}'),
                     ),
                     handlerIncreaseSets: sets.handlerIncreaseSets,
                     handlerDecreaseSets: sets.handlerDecreaseSets,
@@ -109,10 +106,10 @@ void showModal(BuildContext context) {
                   Sets(
                     title: "time",
                     cnt: time.getRestTimeStr,
-                    InputWidget: TimeInputs(
-                      minutesController: minutesController,
-                      secondsController: secondsController,
-                      handlerSetTimer: time.handlerUpdateSets,
+                    InputWidget: SizedBox(
+                      width: 100,
+                      child: Text(
+                          '${minutesController.text} : ${secondsController.text}'),
                     ),
                     handlerIncreaseSets: time.handlerIncreaseSets,
                     handlerDecreaseSets: time.handlerDecreaseSets,

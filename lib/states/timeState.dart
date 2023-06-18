@@ -20,12 +20,12 @@ class TimeState with ChangeNotifier {
   }
 
   void handlerDecreaseSets(){
-    restTime--;
+    restTime = restTime - 10;
     notifyListeners();
   }
 
   void handlerIncreaseSets(){
-    restTime++;
+    restTime = restTime + 10;
     notifyListeners();
   }
 

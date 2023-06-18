@@ -1,33 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-class MyRangeTextInputFormatter extends TextInputFormatter {
-  final int min;
-  final int max;
+import '../states/timeState.dart';
 
-  MyRangeTextInputFormatter({required this.min, required this.max});
 
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    if (newValue.text.isEmpty) {
-      return newValue;
-    }
-    int number = int.tryParse(newValue.text) ?? 0;
-    number = clampNumber(number);
-    String clampedValue = number.toString();
-    return newValue.copyWith(
-      text: clampedValue,
-      selection: TextSelection.collapsed(offset: clampedValue.length),
-    );
-  }
-
-  int clampNumber(int number) {
-    return number.clamp(min, max);
-  }
-}
-
-class TimeInputs extends StatelessWidget {
+class TimeInputs extends StatefulWidget {
   final TextEditingController minutesController;
   final TextEditingController secondsController;
   final Function handlerSetTimer;
@@ -39,19 +17,35 @@ class TimeInputs extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<TimeInputs> createState() => _TimeInputsState();
+}
+
+
+class _TimeInputsState extends State<TimeInputs> {
+  int restTime = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    final time = Provider.of<TimeState>(context, listen: false);
+    restTime = time.getRestTime;
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         SizedBox(
           width: 50,
           child: TextField(
-            controller: minutesController,
+            controller: widget.minutesController,
             keyboardType: TextInputType.number,
             onChanged: (value) {
-// 숫자로 변환하여 사용
-              int number = int.tryParse(value) ?? 0;
-// 변환된 숫자 사용
-// 예: 다른 변수에 할당하거나 상태를 업데이트하는 등의 동작 수행
+              int minutes = int.tryParse(value) ?? 0;
+              if (minutes > 99) return;
+              restTime = minutes * 60 + (restTime % 60);
+              widget.handlerSetTimer(restTime);
             },
           ),
         ),
@@ -59,19 +53,13 @@ class TimeInputs extends StatelessWidget {
         SizedBox(
           width: 50,
           child: TextField(
-            controller: secondsController,
+            controller: widget.secondsController,
             keyboardType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')), // 숫자만 입력 허용
-              MyRangeTextInputFormatter(min: 0, max: 60), // 입력 범위 제한
-            ],
             onChanged: (value) {
-// 숫자로 변환하여 사용
-              int number = int.tryParse(value) ?? 0;
-
-
-// 변환된 숫자 사용
-// 예: 다른 변수에 할당하거나 상태를 업데이트하는 등의 동작 수행
+              int seconds = int.tryParse(value) ?? 0;
+              print(seconds);
+              restTime = (restTime ~/ 60) * 60 + seconds;
+              widget.handlerSetTimer(restTime);
             },
           ),
         ),
@@ -79,3 +67,4 @@ class TimeInputs extends StatelessWidget {
     );
   }
 }
+
