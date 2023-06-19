@@ -17,23 +17,28 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      child: MaterialApp(
-        home: Scaffold(
-          body: Column(
-            children: [Setting(), TimerWidget()],
-          ),
-          backgroundColor: Colors.white,
-        ),
-      ),
-      providers : [
+      providers: [
         ChangeNotifierProvider(
           create: (BuildContext context) => SetsState(),
         ),
         ChangeNotifierProvider<TimeState>(
           create: (BuildContext context) => TimeState(),
         ),
-      ]
-      ,
+      ],
+      child: MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: [
+              Setting(),
+              SizedBox(
+                height: 80,
+              ),
+              TimerWidget()
+            ],
+          ),
+          backgroundColor: Colors.white,
+        ),
+      ),
     );
   }
 }

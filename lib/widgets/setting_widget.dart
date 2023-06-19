@@ -98,7 +98,10 @@ void showModal(BuildContext context) {
                     cnt: sets.getSets,
                     InputWidget: SizedBox(
                       width: 100,
-                      child: Text('${sets.getSets}'),
+                      child: Text(
+                        '${sets.getSets}',
+                        style: TextStyle(fontSize: 24.0),
+                      ),
                     ),
                     handlerIncreaseSets: sets.handlerIncreaseSets,
                     handlerDecreaseSets: sets.handlerDecreaseSets,
@@ -109,7 +112,9 @@ void showModal(BuildContext context) {
                     InputWidget: SizedBox(
                       width: 100,
                       child: Text(
-                          '${minutesController.text} : ${secondsController.text}'),
+                        '${minutesController.text} : ${secondsController.text}',
+                        style: TextStyle(fontSize: 24.0),
+                      ),
                     ),
                     handlerIncreaseSets: time.handlerIncreaseSets,
                     handlerDecreaseSets: time.handlerDecreaseSets,

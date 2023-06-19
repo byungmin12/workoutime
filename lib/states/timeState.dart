@@ -16,6 +16,7 @@ class TimeState with ChangeNotifier {
 
   void handlerUpdateSets(int newSets) {
     restTime = newSets;
+    initialRestTime = newSets;
     notifyListeners();
   }
 
