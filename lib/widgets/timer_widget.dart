@@ -16,6 +16,7 @@ class TimerWidget extends StatefulWidget {
 class _TimerWidget extends State<TimerWidget> with TickerProviderStateMixin {
   late Timer timer;
   late AnimationController animationController;
+  late Animation<double> animation;
 
   int initialRestTime = 30;
   int t = 0;
@@ -31,6 +32,13 @@ class _TimerWidget extends State<TimerWidget> with TickerProviderStateMixin {
       vsync: this,
       duration: Duration(seconds: time.getRestTime)
     );
+    animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.linear,
+      ),
+    );
+
     super.initState();
   }
 
@@ -39,7 +47,7 @@ class _TimerWidget extends State<TimerWidget> with TickerProviderStateMixin {
     final time = Provider.of<TimeState>(context);
 
     void handlerDecreaseSets() {
-      time.handlerUpdateSets(time.restTime - 1);
+      time.handlerDecreaseOne();
     }
 
     void handlerStartTimer() {
@@ -58,21 +66,28 @@ class _TimerWidget extends State<TimerWidget> with TickerProviderStateMixin {
           }
         });
         if (time.getRestTime == 0) {
+          animationController.reset();
           // 여기에 타이머 종료 후 실행할 코드 추가
           time.handlerInitialSets(); // 다시 초기값으로 설정 또는 원하는 동작 수행
-          animationController.dispose();
+
           setState(() {
             isWorkout = false; // isWorkout 값을 변경하여 UI를 갱신
           });
+          print("done");
+          print(time.getRestTime);
         }
       });
-      animationController.repeat(reverse: false);
-      animationController.duration = Duration(seconds: time.getRestTime);
+      // animationController.repeat(reverse: false);
+      // animationController.duration = Duration(seconds: time.getRestTime);
+      // animationController.addListener(() {
+      //     setState(() {});
+      //   });
+      // animationController.repeat(reverse: false);
+      // animationController.duration = Duration(seconds: time.getRestTime);
       animationController.addListener(() {
-          setState(() {});
-        });
+        setState(() {});
+      });
       animationController.repeat(reverse: false);
-      animationController.duration = Duration(seconds: time.getRestTime);
     }
 
     return Stack(
@@ -91,7 +106,7 @@ class _TimerWidget extends State<TimerWidget> with TickerProviderStateMixin {
             children: [
               CircularProgressIndicator(
                 strokeWidth: 20,
-                value: animationController.value,
+                value: animation.value,
               ),
               Center(
                 child: isWorkout
